@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .main-page {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #f44336; /* Цвет кнопки "Выход" */
+            color: white; /* Цвет текста на кнопке */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+            text-decoration: none;
+        }
+        .content {
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            background-color: white; /* Цвет фона содержимого */
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .user-info {
+            margin: 20px 0;
+        }
+        .user-info div {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+        .user-info label {
+            font-weight: bold;
+        }
+        .role-options {
+            margin: 10px 0;
+        }
+        .button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #f44336; /* Цвет кнопки "Выход" */
+            color: white; /* Цвет текста на кнопке */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header" th:object="${person}">
+        <a href="/books" class="main-page">Books</a>
+        <h1>Пользователь</h1>
+        <h2 id="username" th:text="*{username}">Username</h2>
+        <a href="/admin/home" class="button">Home</a>
+    </div>
+
+    <div class="content" th:object="${person}">
+        <div class="user-info">
+            <div>
+                <label for="fullName">Имя Фамилия:</label>
+                <span th:text="${person.getFullName()}" id="fullName">Имя Фамилия</span>
+            </div>
+            <div>
+                <label for="readerId">Номер читательского билета:</label>
+                <span th:text="${person.getTicket()}" id="readerId">Номер билета</span>
+            </div>
+            <div>
+                <span th:text="${(person.isEnabled()) ? 'Не заблокирован' : 'Заблокирован'}">Блокировка</span>
+            </div>
+        </div>
+        <form th:method="PATCH" th:action="@{/admin/users/{id}(id=${person.getId()})}" class="role-options">
+            <p>Выберите роль:</p>
+            <label>
+                <input type="radio" th:field="*{role}" th:value="USER" checked> USER
+            </label>
+            <label>
+                <input type="radio" th:field="*{role}" th:value="ADMIN"> ADMIN
+            </label>
+
+            <br/>
+            <input type="submit" value="Сохранить"/>
+        </form>
+        <div th:if="${person.isEnabled()}">
+            <form th:method="PATCH" th:action="@{/admin/users/{id}/block(id=${person.getId()})}">
+                <input type="submit" value="Заблокировать"/>
+            </form>
+        </div>
+        <div th:unless="${person.isEnabled()}">
+            <form th:method="PATCH" th:action="@{/admin/users/{id}/unblock(id=${person.getId()})}">
+                <input type="submit" value="Разблокировать"/>
+            </form>
+        </div>
+        <br/>
+        <form th:method="GET" th:action="@{/admin/users}">
+            <input type="submit" value="Вернуться к списку пользователей"/>
+        </form>
+    </div>
+</body>
+</html>

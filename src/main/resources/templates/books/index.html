@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .main {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .login-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #f44336; /* Цвет кнопки "Выход" */
+            color: white; /* Цвет текста на кнопке */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .signup-button {
+            position: absolute;
+            top: 60px;
+            right: 15px;
+            background-color: #f44336; /* Цвет кнопки "Выход" */
+            color: white; /* Цвет текста на кнопке */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .home-button {
+            position: absolute;
+            top: 30px;
+            right: 15px;
+            background-color: #f44336; /* Цвет кнопки "Выход" */
+            color: white; /* Цвет текста на кнопке */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main">
+        <h1>Библиотека</h1>
+        <div th:if="${logged}">
+            <a th:if="${admin}" href="/admin/home" class="home-button">Home</a>
+            <a th:unless="${admin}" href="/user/home" class="home-button">Home</a>
+        </div>
+        <div th:unless="${logged}">
+            <a href="/login" class="login-button">Log in</a>
+            <a href="/register" class="signup-button">Sign up</a>
+        </div>
+    </div>
+    <div th:each="book : ${books}">
+        <a th:href="@{/books/{id}(id=${book.getId()})}"
+           th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</a>
+    </div>
+
+    <br/>
+    <hr/>
+    <form th:method="GET" th:action="@{/books/search}">
+        <input type="submit" value="Поиск книги"/>
+    </form>
+    <br/>
+    <form th:if="${admin}" th:method="GET" th:action="@{/books/new}">
+        <input type="submit" value="Добавить книгу"/>
+    </form>
+
+</body>
+</html>

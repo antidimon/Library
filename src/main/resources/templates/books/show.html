@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>Show</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .main {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+    </style>
+</head>
+<body>
+    <div class="main">
+        <h1 th:text="${book.getTitle()}">Книга</h1>
+    </div>
+    <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
+
+    <div th:if="${owner}">
+        <div th:if="${admin}">
+            <span>Книга сейчас у: </span> <span th:text="${owner.getFullName()}">Person Name</span>
+
+            <form th:method="PATCH" th:action="@{/books/{id}/release(id=${book.getId()})}">
+                <input type="submit" value="Освободить книгу"/>
+            </form>
+        </div>
+        <div th:unless="${admin}">
+            <div th:if="${username}">
+                <span th:if="${username} == ${book.getOwner().getUsername()}">Книга у вас</span>
+                <span th:unless="${username} == ${book.getOwner().getUsername()}">Книга занята</span>
+            </div>
+            <span th:unless="${username}">Книга занята</span>
+        </div>
+    </div>
+
+
+    <div th:if="${people}">
+        <form th:if="${admin}" th:method="PATCH" th:action="@{/books/{id}/assign(id=${book.getId()})}">
+            <label for="person">Выберите человека</label>
+            <select th:object="${person}" th:field="*{id}" id="person">
+                <option th:each="person : ${people}" th:value="${person.getId()}" th:text="${person.getFullName()}">
+                </option>
+            </select>
+            <input type="submit" value="Назначить книгу"/>
+        </form>
+        <span th:unless="${admin}">Эта книга свободна</span>
+    </div>
+
+    <hr/>
+
+    <form th:if="${admin}" th:method="GET" th:action="@{/books/{id}/edit(id=${book.getId()})}">
+        <input type="submit" value="Редактировать"/>
+    </form>
+    <br/>
+    <form th:if="${admin}" th:method="DELETE" th:action="@{/books/{id}(id=${book.getId()})}">
+        <input type="submit" value="Удалить"/>
+    </form>
+    <br/>
+    <form th:method="GET" th:action="@{/books}">
+        <input type="submit" value="Вернуться к списку книг"/>
+    </form>
+
+</body>
+</html>

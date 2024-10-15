@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Страница входа</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+        }
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px; /* Фиксированная ширина для симметрии */
+            margin: 0 auto; /* Центрирование формы */
+            margin-bottom: 20px; /* Расстояние между текстовыми полями и рамкой */
+        }
+        h1 {
+            text-align: center;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<form action="/login" method="post">
+    <h1>Вход в систему</h1>
+    <div th:if="${hasError}">
+        <span th:if="${errorName.equals('credentials')}" style="color:red">Неверные данные</span>
+        <span th:if="${errorName.equals('block')}" style="color:red">Пользователь заблокирован</span>
+    </div>
+    <br/>
+    <label for="username">Имя пользователя:</label>
+    <input type="text" id="username" name="username" required>
+
+    <label for="password">Пароль:</label>
+    <input type="password" id="password" name="password" required>
+
+    <a href="/register">Зарегистрироваться</a>
+
+    <button type="submit">Войти</button>
+</form>
+</body>
+</html>

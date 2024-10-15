@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        a.function:link {
+            width: 150px;
+            height: 30px;
+            background-color: #ccffcc;
+            color: black;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 20px;
+        }
+        a.function:hover {
+            background-color: green;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+        }
+        .main-page {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: #f44336; /* Цвет кнопки "Выход" */
+            color: white; /* Цвет текста на кнопке */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 25px;
+            text-decoration: none;
+        }
+        .button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: #f44336; /* Цвет кнопки "Выход" */
+            color: white; /* Цвет текста на кнопке */
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header" th:object="${person}">
+        <a href="/books" class="main-page">Books</a>
+        <h1>История</h1>
+        <h2 id="username" th:text="*{username}">Username</h2>
+        <a href="/user/home" class="button">Home</a>
+    </div>
+
+    <div th:each="book : ${books}">
+        <span th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</span>
+        <br/>
+        <hr/>
+    </div>
+
+
+</body>
+</html>
